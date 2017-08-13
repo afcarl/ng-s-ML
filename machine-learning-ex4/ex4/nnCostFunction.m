@@ -38,17 +38,57 @@ Theta2_grad = zeros(size(Theta2));
 %         variable J. After implementing Part 1, you can verify that your
 %         cost function computation is correct by verifying the cost
 %         computed in ex4.m
+X = [ones(m,1) X];
+a1 = X;
+z2 = a1 * Theta1';
+a2 = sigmoid(z2);
+a2 = [ones(m,1) a2];
+z3 = a2 * Theta2';
+pred = sigmoid(z3);
+cost_1 = -y .* log(pred) - (1 - y) .* log(1 - pred);
+% size(cost_1)
+
+for k = 1:num_labels
+    kth_y = y == k;
+    kth_pred = pred(:, k);
+    kth_j = 1 / m * sum(-kth_y .* log(kth_pred) - (1 - kth_y) .* log(1 - kth_pred));
+    J = J + kth_j;
+end
+
+regularization_term = lambda*(sum(sum(Theta1(:,2:end) .^ 2)) + sum(sum(Theta2(:,2:end) .^ 2)))/(2*m);
+J = J + regularization_term;
+
+
 %
 % Part 2: Implement the backpropagation algorithm to compute the gradients
 %         Theta1_grad and Theta2_grad. You should return the partial derivatives of
 %         the cost function with respect to Theta1 and Theta2 in Theta1_grad and
 %         Theta2_grad, respectively. After implementing Part 2, you can check
 %         that your implementation is correct by running checkNNGradients
-%
 %         Note: The vector y passed into the function is a vector of labels
 %               containing values from 1..K. You need to map this vector into a 
 %               binary vector of 1's and 0's to be used with the neural network
 %               cost function.
+for a=1:m
+	for b=1:num_labels
+		k_y = y(a) == b;
+		delta_3(b) = pred(a,b) - k_y;
+	end
+	delta_2 = Theta2' * delta_3' .* sigmoidGradient([1, z2(a, :)])';
+    delta_2 = delta_2(2:end);
+
+    Theta1_grad = Theta1_grad + delta_2 * a1(a, :);
+    Theta2_grad = Theta2_grad + delta_3' * a2(a, :);
+end
+
+Theta1_grad = Theta1_grad / m;
+Theta2_grad = Theta2_grad / m;
+
+Theta1_grad(:, 2:end) = Theta1_grad(:, 2:end) + lambda / m * Theta1(:, 2:end);
+Theta2_grad(:, 2:end) = Theta2_grad(:, 2:end) + lambda / m * Theta2(:, 2:end);
+
+
+
 %
 %         Hint: We recommend implementing backpropagation using a for-loop
 %               over the training examples if you are implementing it for the 
