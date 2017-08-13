@@ -22,6 +22,9 @@ X = [ones(m, 1) X];
 %               your learned logistic regression parameters (one-vs-all).
 %               You should set p to a vector of predictions (from 1 to
 %               num_labels).
+% size(X)
+predictions = X * all_theta';
+[temp,p] = max(predictions,[],2);
 %
 % Hint: This code can be done all vectorized using the max function.
 %       In particular, the max function can also return the index of the 
