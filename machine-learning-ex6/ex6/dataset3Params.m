@@ -11,8 +11,8 @@ function [C, sigma] = dataset3Params(X, y, Xval, yval)
 C = 1;
 sigma = 0.3;
 
-Cs = [0.01 0.03 0.1 0.3 1 3 10 30];
-sigmas = [0.01 0.03 0.1 0.3 1 3 10 30];
+Cs = [0.1 0.3 1 3 ];
+sigmas = [0.01 0.03 0.1 0.3 1];
 
 for i=1:length(Cs)
 	for j=1:length(sigmas)
