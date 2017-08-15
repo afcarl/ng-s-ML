@@ -20,6 +20,28 @@ idx = zeros(size(X,1), 1);
 %
 % Note: You can use a for-loop over the examples to compute this.
 %
+for i=1:length(X)
+	% centroids
+	% X(i,:)
+	% centroids - X(i,:)
+	differences = norm(centroids .- X(i,:),2,'rows');
+	% differences
+	[minimum_for_Xi,index] = min(differences);
+	idx(i) = index;
+	% break
+end	
+
+% for i=1:length(X)
+%     distance = inf;
+%     for j=1:K
+%         kDist = norm(X(i, :) - centroids(j, :));
+%         if (kDist < distance)
+%             distance = kDist;
+%             idx(i) = j;
+%         end
+%     end
+% end
+
 
 
 
